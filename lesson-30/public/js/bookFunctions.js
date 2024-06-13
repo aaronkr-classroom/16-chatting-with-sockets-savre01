@@ -10,7 +10,22 @@ $(document).ready(() => {
    * Listing 30.5 (p. 445)
    * socket.io를 취한 클라이언트 측 JavaScript 추가
    */
+  const socket = io();
 
+  $("#chat-form").submit(() => {
+    socket.emit("message");
+    $("#chat-input").val("");
+    return false;
+  });
+
+  socket.on("message", (message) => {
+    displayMessage(message.content);
+  });
+
+  let displayMessage = (message) => {
+    $("chat").prepend(`<li>${message}</li>`);
+  };
+  
   $("#modal-button").click(() => {
     $(".modal-body").html("");
     $.get("/courses?format=json", (data) => {
